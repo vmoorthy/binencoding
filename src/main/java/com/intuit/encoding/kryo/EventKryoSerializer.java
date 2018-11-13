@@ -15,9 +15,14 @@ public class EventKryoSerializer {
         kryo.register(Event.class);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Output output = new Output(byteArrayOutputStream);
-        kryo.writeClassAndObject(output,event);
-        output.close();
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-        return bytes;
+        try {
+            kryo.writeClassAndObject(output, event);
+            output.close();
+            byte[] bytes = byteArrayOutputStream.toByteArray();
+            return bytes;
+        } finally {
+            output.close();
+            byteArrayOutputStream.close();
+        }
     }
 }
